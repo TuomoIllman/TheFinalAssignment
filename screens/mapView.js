@@ -14,53 +14,64 @@ import {
   getCurrentPositionAsync,
   requestForegroundPermissionsAsync,
 } from "expo-location";
+
 import { Activity, useEffect, useState } from "react";
 import MapView from "react-native-maps";
 import Constants from "expo-constants";
 
-export default function MapScreen() {
-  const [coord, setCoord] = useState({ latitude: 60.1699, longitude: 24.9384 });
-  const [text, setText] = useState("");
-  //const [ loading, setLoading ] = useState(true);
+export default function MapScreen({route}) {
+  const defaultCoord = { latitude: 60.1699, longitude: 24.9384 }; 
+  const [coord, setCoord] = useState(defaultCoord);
+  const [loading, setLoading] = useState(true);
+
+  const locationName = route.params?.locationName;
 
   useEffect(() => {
-    (async function () {
-      const { status } = await requestForegroundPermissionsAsync();
-    })();
-  }, []);
-  //if(loading){
-  //return(<ActivityIndicator/>);
+    (async () => {
+      
+      await requestForegroundPermissionsAsync();
 
-  async function getLocation() {
-    const result = await geocodeAsync(text);
-    setCoord(result[0]);
+      if (locationName) {
+        try {
+          const result = await geocodeAsync(locationName);
+          if (result.length > 0) {
+            setCoord({
+              latitude: result[0].latitude,
+              longitude: result[0].longitude,
+            });
+          }
+        } catch (error) {
+          console.log("Geocode error:", error);
+        }
+      }
+
+      setLoading(false);
+    })();
+  }, [locationName]);
+
+  if (loading || !coord) {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter location"
-          value={text}
-          onChangeText={setText}
-        ></TextInput>
-        <Pressable style={styles.button} onPress={getLocation}>
-          <Text style={styles.buttonText}>Search</Text>
-        </Pressable>
-      </View>
       <MapView
         style={styles.map}
         region={{
           latitude: coord.latitude,
           longitude: coord.longitude,
-          latitudeDelta: 0.093,
-          longitudeDelta: 0.0421,
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.05,
         }}
-      ></MapView>
+      />
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
