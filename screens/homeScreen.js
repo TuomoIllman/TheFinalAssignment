@@ -1,13 +1,38 @@
 import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { useContext, useEffect } from "react";
+import { UserContext } from "../providers/userProvider";
+
 
 
 export default function HomeScreen({navigation}) {
 
-   
+  const { username, logout } = useContext(UserContext);
+
+   useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Pressable
+          onPress={async () => {
+            await logout();              
+            navigation.reset({
+              index:0,
+              routes:[{name: "Login"}],
+            })  
+          }}
+        >
+          <Text style = {styles.regularText}>Logout</Text>
+        </Pressable>
+      ),
+    });
+  }, [username]);
+
+
 
   return (
     <View style={styles.container}>
+        <Text style={styles.headerText}>Welcome {username}</Text>
         <Text style = {styles.headerText}> Choose a View</Text>
+        
 
          <Pressable
         style = {styles.button}
@@ -50,7 +75,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingRight: 10,
     paddingLeft: 20,
-    paddingTop: 50,
+    paddingTop: 10,
     color: "white",
   },
 
@@ -78,6 +103,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
     color: "white",
+    margin: 10,
+  },
+
+  regularText:{
+    fontSize:10,
+    color:"white",
+    textAlign: "center",
     margin: 10,
   },
 

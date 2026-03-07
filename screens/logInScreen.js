@@ -8,26 +8,35 @@ import {
   Alert,
   Pressable,
 } from "react-native";
-import { useState } from "react";
+import { useState, useContext, useEffect  } from "react";
+import { UserContext } from "../providers/userProvider";
+
 
 
 export default function LoginScreen({ navigation }) {
 
+  const {username, saveUserName} = useContext(UserContext);
 
-
-  const [email, onChangeEmail] = useState("");
+  const [user, onChangeUser] = useState("");
   const [password, onChangePassword] = useState("");
 
-  const correctEmail = "testi@testi.com";
+  const correctUser = "Tuomo";
   const correctPassword = "salasana";
 
-  const handleLogin = () => {
-    if (email === correctEmail && password === correctPassword) {
-      navigation.navigate("Home", { username: email });
-    } else {
-      Alert.alert("Login failed");
-    }
-  };
+useEffect(() => {
+  if (username) {
+    navigation.navigate("Home");
+  }
+}, [username]);
+
+ const handleLogin = async () => {
+  if (user === correctUser && password === correctPassword) {
+    await saveUserName(user);  
+    navigation.navigate("Home"); 
+  } else {
+    Alert.alert("Login failed");
+  }
+};
 
   return (
     <KeyboardAvoidingView
@@ -45,10 +54,9 @@ export default function LoginScreen({ navigation }) {
 
         <TextInput
           style={styles.input}
-          value={email}
-          onChangeText={onChangeEmail}
-          placeholder={"Email"}
-          keyboardType={"email-address"}
+          value={user}
+          onChangeText={onChangeUser}
+          placeholder={"Username"}
           clearButtonMode={"always"}
         />
 
@@ -64,9 +72,7 @@ export default function LoginScreen({ navigation }) {
 
         <Pressable
           style={styles.button}
-          onPress={() => {
-            handleLogin();
-          }}
+          onPress={() => {handleLogin()}}
         >
           <Text style={styles.buttonText}>Log in!</Text>
         </Pressable>

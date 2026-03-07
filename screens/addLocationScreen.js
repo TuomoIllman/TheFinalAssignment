@@ -1,24 +1,72 @@
-import { StyleSheet, View, Text, TextInput, Pressable } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Pressable, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, Alert} from 'react-native';
 import { useContext, useState } from 'react';
 import { LocationContext } from '../providers/locationProvider';
 
+
+
 export default function AddLocationScreen() {
+  const { saveLocation } = useContext(LocationContext);
+
   const [name, setName] = useState("");
-  const { setLocation } = useContext(LocationContext);
+  const [description, setDescription] = useState("");
+  const[rating, setRating] = useState("")
+
+  function handleSave() {
+
+    const newLocation = {
+      name: name,
+      description: description,
+      rating: rating
+    };
+
+    saveLocation(newLocation);
+    Alert.alert("Location Saved!")
+
+    setName("");
+    setDescription("");
+    setRating("");
+  }
+
+ 
+  
+  
   return (
+     <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="Enter location"
+        placeholder="Location name"
         value={name}
         onChangeText={setName}
       />
-      <Pressable style={styles.button} onPress={() => setLocation(name)}>
+      <TextInput
+        style={styles.input}
+        placeholder="Description"
+        value={description}
+        onChangeText={setDescription}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Rating (1-5 starts)"
+        value={rating}
+        onChangeText={setRating}
+        keyboardType={"numeric"}
+      />
+
+      <Pressable style={styles.button} onPress={handleSave}>
         <Text style={styles.buttonText}>Save Location</Text>
       </Pressable>
     </View>
+    </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
+
+
 
 
 const styles = StyleSheet.create({
