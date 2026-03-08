@@ -4,7 +4,9 @@ import { LocationContext } from '../providers/locationProvider';
 
 
 
+
 export default function AddLocationScreen() {
+
   const { saveLocation } = useContext(LocationContext);
 
   const [name, setName] = useState("");
@@ -28,8 +30,6 @@ export default function AddLocationScreen() {
   }
 
  
-  
-  
   return (
      <KeyboardAvoidingView
       style={styles.container}
@@ -37,6 +37,8 @@ export default function AddLocationScreen() {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={styles.container}>
+      
+      
       <TextInput
         style={styles.input}
         placeholder="Location name"
@@ -115,6 +117,13 @@ const styles = StyleSheet.create({
     color: "white",
     margin: 10,
   },
+
+  loggedIn:{
+    fontSize: 15,
+    textAlign: "center",
+    padding:20,
+    color: "white",
+  }
 
  
 });

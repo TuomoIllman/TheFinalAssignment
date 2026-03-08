@@ -6,26 +6,7 @@ import { UserContext } from "../providers/userProvider";
 
 export default function HomeScreen({navigation}) {
 
-  const { username, logout } = useContext(UserContext);
-
-   useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <Pressable
-          onPress={async () => {
-            await logout();              
-            navigation.reset({
-              index:0,
-              routes:[{name: "Login"}],
-            })  
-          }}
-        >
-          <Text style = {styles.regularText}>Logout</Text>
-        </Pressable>
-      ),
-    });
-  }, [username]);
-
+  const { username } = useContext(UserContext);
 
 
   return (
