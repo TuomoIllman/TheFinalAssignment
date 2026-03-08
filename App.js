@@ -11,7 +11,7 @@ import LocationsScreen from './screens/locationsScreen';
 import AddLocationScreen from './screens/addLocationScreen';
 import MapScreen from './screens/mapView';
 import UserProvider from './providers/userProvider';
-
+import CountrySearchScreen from './screens/countrySearchScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -41,6 +41,7 @@ export default function App() {
           <Stack.Screen name = 'Map' component = {MapScreen} />
           <Stack.Screen name = 'Locations' component = {LocationsScreen} />
           <Stack.Screen name = 'AddLocation' component = {AddLocationScreen} />
+          <Stack.Screen name = 'CountrySearch' component = {CountrySearchScreen}/>
    
         </Stack.Navigator>
       </NavigationContainer>

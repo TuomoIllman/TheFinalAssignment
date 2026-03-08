@@ -54,6 +54,13 @@ export default function HomeScreen({navigation}) {
           <Text style = {styles.buttonText}>View Map</Text>
         </Pressable>
 
+        <Pressable
+        style = {styles.button}
+        onPress = {()=> navigation.navigate("CountrySearch")}
+        >
+          <Text style = {styles.buttonText}>Country Search</Text>
+        </Pressable>
+
     </View>
   );
 }
